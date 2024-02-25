@@ -1,47 +1,150 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from dependency_injector.wiring import inject, Provide
+from main.libraries.di_container import Container
+from main.libraries.tools.core.log_tool import LogTool
 
 router = APIRouter()
 
-@router.get("/characters", tags=["Characters"])
-async def get_characters():
-    """
-    Retorna uma lista de characters.
-    """
-    characters = [
-        {"id": 1, "name": "Character 1"},
-        {"id": 2, "name": "Character 2"},
-        {"id": 3, "name": "Character 3"}
-    ]
-    return characters
 
-@router.get("/characters/{character_id}", tags=["Characters"])
-async def get_character(character_id: int):
+@router.get(
+    "/characters",
+    tags=["Characters"],
+    responses={
+        200: {"description": "Success", "content": {"application/json": {}}},
+        500: {
+            "description": "Internal Server Error",
+            "content": {"application/json": {}},
+        },
+    },
+)
+@inject
+async def get_characters(logger: LogTool = Depends(Provide[Container.log_tool])):
     """
-    Retorna um character específico com base no ID fornecido.
-    """
-    character = {"id": character_id, "name": f"Character {character_id}"}
-    return character
+    Get all characters.
 
-@router.post("/characters", tags=["Characters"])
-async def create_character(character: dict):
-    """
-    Cria um novo character com base nos dados fornecidos.
-    """
-    # Lógica para criar um novo character
-    return character
+    Returns a JSON object with a list of characters.
 
-@router.put("/characters/{character_id}", tags=["Characters"])
-async def update_character(character_id: int, character: dict):
+    Returns:
+        - 200: Success with the list of characters.
+        - 500: Internal Server Error with the error message.
     """
-    Atualiza um character existente com base no ID fornecido e nos dados fornecidos.
-    """
-    # Lógica para atualizar o character
-    return character
+    try:
+        # Mocked characters data
+        characters = [
+            {"id": 1, "name": "Character 1"},
+            {"id": 2, "name": "Character 2"},
+            {"id": 3, "name": "Character 3"},
+        ]
 
-@router.delete("/characters/{character_id}", tags=["Characters"])
-async def delete_character(character_id: int):
+        logger.info("Characters information requested and returned successfully.")
+        return characters
+    except Exception as e:
+        logger.error(f"Error while getting characters: {str(e)}")
+        return {"error": str(e)}, 500
+
+
+@router.post(
+    "/characters",
+    tags=["Characters"],
+    responses={
+        200: {"description": "Success", "content": {"application/json": {}}},
+        500: {
+            "description": "Internal Server Error",
+            "content": {"application/json": {}},
+        },
+    },
+)
+@inject
+async def create_character(logger: LogTool = Depends(Provide[Container.log_tool])):
     """
-    Exclui um character existente com base no ID fornecido.
+    Create a new character.
+
+    Returns a JSON object with the created character.
+
+    Returns:
+        - 200: Success with the created character.
+        - 500: Internal Server Error with the error message.
     """
-    # Lógica para excluir o character
-    return {"message": "Character deleted"}
+    try:
+        # Mocked character data
+        character = {"id": 4, "name": "New Character"}
+
+        logger.info("Character creation requested and returned successfully.")
+        return character
+    except Exception as e:
+        logger.error(f"Error while creating character: {str(e)}")
+        return {"error": str(e)}, 500
+
+
+@router.put(
+    "/characters/{character_id}",
+    tags=["Characters"],
+    responses={
+        200: {"description": "Success", "content": {"application/json": {}}},
+        500: {
+            "description": "Internal Server Error",
+            "content": {"application/json": {}},
+        },
+    },
+)
+@inject
+async def update_character(
+    character_id: int, logger: LogTool = Depends(Provide[Container.log_tool])
+):
+    """
+    Update an existing character.
+
+    Returns a JSON object with the updated character.
+
+    Returns:
+        - 200: Success with the updated character.
+        - 500: Internal Server Error with the error message.
+    """
+    try:
+        # Mocked character data
+        character = {"id": character_id, "name": "Updated Character"}
+
+        logger.info(
+            f"Character update requested for ID {character_id} and returned successfully."
+        )
+        return character
+    except Exception as e:
+        logger.error(f"Error while updating character: {str(e)}")
+        return {"error": str(e)}, 500
+
+
+@router.delete(
+    "/characters/{character_id}",
+    tags=["Characters"],
+    responses={
+        200: {"description": "Success", "content": {"application/json": {}}},
+        500: {
+            "description": "Internal Server Error",
+            "content": {"application/json": {}},
+        },
+    },
+)
+@inject
+async def delete_character(
+    character_id: int, logger: LogTool = Depends(Provide[Container.log_tool])
+):
+    """
+    Delete an existing character.
+
+    Returns a JSON object with the deleted character.
+
+    Returns:
+        - 200: Success with the deleted character.
+        - 500: Internal Server Error with the error message.
+    """
+    try:
+        # Mocked character data
+        character = {"id": character_id, "name": "Deleted Character"}
+
+        logger.info(
+            f"Character deletion requested for ID {character_id} and returned successfully."
+        )
+        return character
+    except Exception as e:
+        logger.error(f"Error while deleting character: {str(e)}")
+        return {"error": str(e)}, 500
