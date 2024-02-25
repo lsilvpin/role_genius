@@ -1,5 +1,5 @@
 from dependency_injector import providers, containers
-from main.library.tools.core.log_tool import LogTool
+from main.libraries.tools.core.log_tool import LogTool
 
 
 class Container(containers.DeclarativeContainer):
