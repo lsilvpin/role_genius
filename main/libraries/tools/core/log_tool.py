@@ -1,5 +1,7 @@
 import sys, os
 
+from main.libraries.tools.core.settings_tool import SettingsTool
+
 sys.path.insert(0, os.path.abspath("."))
 from datetime import datetime
 
@@ -9,13 +11,14 @@ class LogTool:
     A utility class for logging messages with different log levels.
     """
 
-    def __init__(self):
+    def __init__(self, settings_tool: SettingsTool):
         """
         Initializes a new instance of the LogTool class.
         The log level is determined by the LOG_LEVEL environment variable.
         If the variable is not set, the default log level is 'debug'.
         """
-        self.log_level = os.getenv("LOG_LEVEL", "debug")
+        self.settings_tool = settings_tool
+        self.log_level = settings_tool.get("LOG_LEVEL") or "debug"
 
     def info(self, msg: str) -> None:
         """

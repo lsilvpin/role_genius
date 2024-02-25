@@ -2,9 +2,9 @@ import sys, os
 
 sys.path.insert(0, os.path.abspath("."))
 from fastapi.testclient import TestClient
-from main.apps.microservice.controllers.character_controller import router
+from main.apps.microservice.main import app
 
-client = TestClient(router)
+client = TestClient(app)
 
 
 def test_get_characters():
