@@ -72,3 +72,13 @@ def test_should_create_three_env_vars_read_all_and_delete_all(settings_tool):
         all_vars[key2]
     with pytest.raises(KeyError):
         all_vars[key3]
+
+def test_should_get_openai_api_key(settings_tool):
+    key = "OPENAI_API_KEY"
+    value = settings_tool.get(key)
+    assert value is not None
+
+def test_should_get_openai_org_id(settings_tool):
+    key = "OPENAI_ORG_ID"
+    value = settings_tool.get(key)
+    assert value is not None

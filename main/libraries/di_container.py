@@ -17,7 +17,7 @@ class Container(containers.DeclarativeContainer):
     log_tool = providers.Factory(LogTool, settings_tool=settings_tool)
 
     # Adapters
-    role_interpreter = providers.Factory(RoleInterpreter, logger=log_tool)
+    role_interpreter = providers.Factory(RoleInterpreter, settings_tool=settings_tool, logger=log_tool)
 
     # Wiring
     wiring_config = containers.WiringConfiguration(
